@@ -21,7 +21,14 @@ Along with all compilation tools, and other necessary packages of each library.
 
 ## Compile
 
-To compile run `make`.
+Before you compile you need to make sure you have the
+[json](https://github.com/nlohmann/json) library. If there is no file named
+`lib/json.hpp` then run `make get`, to retreive the file.
+
+You could also just do this manually as well, by downloading the `json.hpp` from
+the repositories releases.
+
+Then to compile, run `make`.
 
 
 ## Clean
