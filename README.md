@@ -3,6 +3,10 @@
 # xrp-bot++
 ##### A improved xrp notification bot.
 
+[![C++](https://img.shields.io/badge/C%2B%2B-blue?style=flat-square&logo=cplusplus)](https://www.stroustrup.com/)
+[![libcurl](https://img.shields.io/badge/libcurl-blue?style=flat-square&logo=curl)](https://curl.se/libcurl/)
+[![xrp](https://img.shields.io/badge/xrp-black?style=flat-square&logo=xrp)](https://xrpl.org/)
+[![tgbot-cpp](https://img.shields.io/badge/telegram-green?style=flat-square&logo=telegram)](https://github.com/reo7sp/tgbot)
 
 <img alt="xrp-bot++ logo" src="img/logo.svg" width=50%></img>
 </div>
@@ -18,14 +22,12 @@ an XRP token across multiple API endpoints.
 ## Program Usage
 
 
-```
-        -v | --version   - Print version.
-        -h | --help      - Print help text.
-        -m | --method    - Change method, or use no arguments to list methods.
-        -e | --enable    - Enable selected method, by the publish method index.
-        -k | --key       - Set the API key, by file, by stdin '-', by argument.
-                        Enables method if not already.
-```
+>        -v | --version   - Print version.
+>        -h | --help      - Print help text.
+>        -m | --method    - Change method, or use no arguments to list methods.
+>        -e | --enable    - Enable selected method, by the publish method index.
+>        -k | --key       - Set the API key, by file, by stdin '-', by argument.
+>                        Enables method if not already.
 
 ### API Keys
 
@@ -67,3 +69,5 @@ re-written.
 
 - [Docs: XRPL](https://xrpl.org/docs)
 - [Docs: XRPSCAN](https://docs.xrpscan.com/api-documentation/introduction)
+- [Docs: XRPSCAN](https://docs.xrpscan.com/api-documentation/introduction)
+- [Docs: XRPLMETA](https://xrplmeta.org/docs)
