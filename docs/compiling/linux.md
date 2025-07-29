@@ -19,7 +19,7 @@ Along with all compilation tools, and other necessary packages of each library.
 - make
 
 
-## Compile
+### Downloads
 
 Before you compile you need to make sure you have the
 [json](https://github.com/nlohmann/json) library. If there is no file named
@@ -27,6 +27,13 @@ Before you compile you need to make sure you have the
 
 You could also just do this manually as well, by downloading the `json.hpp` from
 the repositories releases.
+
+
+
+## Compile
+
+Before compiling you should fully configure the program, in `config.hpp` (take
+note of the `XRP_ID_CODE` and `XRP_ADDRESS` macros).
 
 Then to compile, run `make`.
 

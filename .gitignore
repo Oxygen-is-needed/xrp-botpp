@@ -1,7 +1,8 @@
 **secret*
 **save*
 img/header*
-img/xrp*
+img/Alpha-Andisite.png
 test/*
-xrp-botpp
+**xrp-botpp
 lib/*
+pkg/**

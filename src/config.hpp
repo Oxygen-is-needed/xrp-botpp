@@ -12,8 +12,8 @@
  * and the name of the publish method in lowercase, for FILE, and uppercase for
  * ENV.
  */
-#define SECRET_FILE_PREFIX  "secret"
-#define SECRET_ENV_PREFIX   "SECRET"
+#define SECRET_FILE_PREFIX "secret"
+#define SECRET_ENV_PREFIX "SECRET"
 
 /**
  * define SAVE_FILE_PREFIX - prefix used in save file names
@@ -23,8 +23,7 @@
  * The prefix used when saving data for publishing methods, for xrp update
  * scanner, or other data.
  */
-#define SAVE_FILE_PREFIX  "save"
-
+#define SAVE_FILE_PREFIX "save"
 
 /**
  * define PROGRAM_DESCRIPTION - the program description.
@@ -32,8 +31,8 @@
  * Description of program. Used in the help text.
  */
 #define PROGRAM_DESCRIPTION                                                    \
-  "A bot designed to aggregate and then disseminate inforamtion about an XRP\n" \
-  "token across multiple API endpoints.\n"
+  "A bot designed to aggregate and then disseminate inforamtion about an\n"    \
+  "XRP token across multiple API endpoints.\n"
 
 /**
  * define PROGRAM_POST_HELP - post help flags text.
@@ -44,11 +43,15 @@
  */
 #define PROGRAM_POST_HELP                                                      \
   X("When no API key is given, the program will check two alternative "        \
-    "\nlocations before raising an error. The first location is an environment " \
-    "\nviarble, which follows a specific naming convention: the prefix "         \
-    "\n\"" SECRET_ENV_PREFIX "-\" followed by the API name in uppercase letters. If the "    \
-    "\nenvironment variable is not found, the system will then look for a file " \
-    "\nwith a name constructed using the prefix \"" SECRET_FILE_PREFIX "-\" followed by the API "  \
+    "\nlocations before raising an error. The first location is an "           \
+      "environment "                                                           \
+    "\nviarble, which follows a specific naming convention: the prefix "       \
+    "\n\"" SECRET_ENV_PREFIX                                                   \
+      "-\" followed by the API name in uppercase letters. If the "             \
+    "\nenvironment variable is not found, the system will then look for a "    \
+      "file "                                                                  \
+    "\nwith a name constructed using the prefix \"" SECRET_FILE_PREFIX         \
+      "-\" followed by the API "                                               \
     "\nname lowercase letters.")
 
 /**
@@ -78,12 +81,16 @@
  *    5) long flag argument type
  *    6) argument description
  */
-#define COMMANDLINE_ARGUMENTS \
-  X('v', ' ', ' ', version, no_argument,        "Print version.") \
-  X('h', ' ', ' ', help,    no_argument,        "Print help text.") \
-  X('m', ':', ':', method,  optional_argument,  "Change method, or use no arguments to list methods.") \
-  X('e', ':', ':', enable,  no_argument,        "Enable selected method, by the publish method index.") \
-  X('k', ':', ' ', key,     required_argument,  "Set the API key, by file, by stdin '-', or by argument. Enables method if not already.")
+#define COMMANDLINE_ARGUMENTS                                                  \
+  X('v', ' ', ' ', version, no_argument, "Print version.")                     \
+  X('h', ' ', ' ', help, no_argument, "Print help text.")                      \
+  X('m', ':', ':', method, optional_argument,                                  \
+    "Change method, or use no arguments to list methods.")                     \
+  X('e', ':', ':', enable, no_argument, "Enable selected method.")             \
+  X('d', ':', ':', disable, no_argument, "Disable selected method.")           \
+  X('k', ':', ' ', key, required_argument,                                     \
+    "Set the API key, by file, by stdin '-', or by argument. Enables method "  \
+    "if not already.")
 
 /**
  * define METHODS - Publishing methods, and how to interface with it.
@@ -92,14 +99,14 @@
  *
  * Methods used for publishing, including: push, poll, load, save, check_key.
  */
-#define METHODS \
-	X(TELEGRAM, "Telegram",	\
-      Telegram::push,     /* Function used to push notification         */\
-      Telegram::poll,     /* Function used to check for other commands  */\
-      Telegram::load,     /* Function used to load necessary data       */\
-      Telegram::save,     /* Function used to save necessary data       */\
-      Telegram::check_key /* Function used to check and set the api key */\
-	 )
+#define METHODS                                                                \
+  X(TELEGRAM, "Telegram",                                                      \
+    Telegram::push,     /* Function used to push notification         */       \
+    Telegram::poll,     /* Function used to check for other commands  */       \
+    Telegram::load,     /* Function used to load necessary data       */       \
+    Telegram::save,     /* Function used to save necessary data       */       \
+    Telegram::check_key /* Function used to check and set the api key */       \
+  )
 
 // TODO: move to another part of file
 /**
@@ -107,13 +114,12 @@
  *
  * This determines the count of macro X instances present in the METHODS macro.
  */
-#define X(A,...)  1,
-#define COUNT(...)  (sizeof((int[]){__VA_ARGS__}) / sizeof(int))
+#define X(A, ...) 1,
+#define COUNT(...) (sizeof((int[]){__VA_ARGS__}) / sizeof(int))
 const unsigned int __method_length = COUNT(METHODS);
 #define METHOD_LENGTH (int)__method_length
-#undef  COUNT
-#undef  X
-
+#undef COUNT
+#undef X
 
 /**
  * define XRP_ID_CODE - Essentially the name of the token.
@@ -126,8 +132,6 @@ const unsigned int __method_length = COUNT(METHODS);
 #define XRP_ID_CODE "FML"
 #define XRP_ADDRESS "rw4tietmzbPG2G66UudSGaQ5uYztNow3gQ"
 
-
-
 /**
  * namespace Conf - Functions and data for configuration, with the data
  *  potentially altered.
@@ -136,45 +140,48 @@ const unsigned int __method_length = COUNT(METHODS);
  */
 // Conf {{{
 namespace Conf {
-  enum Methods {
-#define X(a,...)	a,
+enum Methods {
+#define X(a, ...) a,
+  METHODS
+#undef X
+      NONE = -1
+};
+
+unsigned int request_wait_length = 0; ///< Length of waiting after a request
+
+const std::string method_keys[METHOD_LENGTH] = {""};
+const std::string method_secret_local[METHOD_LENGTH] = {
+#define X(a, b, ...)                                                           \
+  SECRET_FILE_PREFIX + boost::to_lower_copy(std::string("-") + b),
     METHODS
 #undef X
-    NONE=-1
-  };
-
-  unsigned int request_wait_length = 10;  ///< Length of waiting after a request
-
-  const std::string method_keys[METHOD_LENGTH] = {""};
-  const std::string method_secret_local[METHOD_LENGTH] = {
-#define X(a,b,...)  SECRET_FILE_PREFIX + boost::to_lower_copy(std::string("-") + b),
+};
+const std::string method_secret_environment[METHOD_LENGTH] = {
+#define X(a, b, ...)                                                           \
+  std::string(SECRET_ENV_PREFIX) + boost::to_upper_copy(std::string(b)),
     METHODS
 #undef X
-  };
-  const std::string method_secret_environment[METHOD_LENGTH] = {
-#define X(a,b,...)  std::string(SECRET_ENV_PREFIX) + boost::to_upper_copy(std::string(b)),
+};
+
+enum Commandline_Flags {
+#define X(A, A1, A2, B, ...) B = A,
+  COMMANDLINE_ARGUMENTS
+#undef X
+};
+
+const std::string id_code = XRP_ID_CODE;
+const std::string address = XRP_ADDRESS;
+
+const std::string save_file_prefix = SAVE_FILE_PREFIX;
+
+const std::string method_save_files[METHOD_LENGTH] = {
+#define X(a, b, ...)                                                           \
+  std::string(SAVE_FILE_PREFIX) +                                              \
+      boost::to_lower_copy(std::string("-" b ".data")),
     METHODS
 #undef X
-  };
-
-  enum Commandline_Flags {
-#define X(A,A1,A2,B,...)  B = A,
-    COMMANDLINE_ARGUMENTS
-#undef  X
-  };
-
-
-  const std::string id_code = XRP_ID_CODE;
-  const std::string address = XRP_ADDRESS;
-
-  const std::string save_file_prefix = SAVE_FILE_PREFIX;
-
-  const std::string method_save_files[METHOD_LENGTH] = {
-#define X(a,b,...)  std::string(SAVE_FILE_PREFIX) + boost::to_lower_copy(std::string("-" b ".data")),
-    METHODS
-#undef X
-  };
-}
+};
+} // namespace Conf
 // }}}
 
 #undef XRP_ID_CODE

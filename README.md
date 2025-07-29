@@ -22,12 +22,14 @@ an XRP token across multiple API endpoints.
 ## Program Usage
 
 
->        -v | --version   - Print version.
+>        -d | --disable   - Disable selected method.
+>        -e | --enable    - Enable selected method.
 >        -h | --help      - Print help text.
+>        -k | --key       - Set the API key, by file, by stdin '-',
+>                           or by argument. Enables method if not already.
 >        -m | --method    - Change method, or use no arguments to list methods.
->        -e | --enable    - Enable selected method, by the publish method index.
->        -k | --key       - Set the API key, by file, by stdin '-', by argument.
->                        Enables method if not already.
+>        -v | --version   - Print version.
+
 
 ### API Keys
 
