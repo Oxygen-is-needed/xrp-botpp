@@ -42,13 +42,13 @@ namespace Args {
 
     void help(void) {
       std::cout << PROGRAM_DESCRIPTION << std::endl;
-#define X(A,A1,A2,B,C,E,...)  std::cout << "\t" << "-" << A \
+#define X(A,A1,A2,B,C,E)  std::cout << "\t" << "-" << A \
       << " | " << "--" << STR(B) << "\t - " << E << std::endl;
       ARGUMENTS
 #undef  X
 
       std::cout <<
-#define X(A,...)  "\n\t" A <<
+#define X(A)  "\n\t" A <<
         PROGRAM_POST_HELP
 #undef  X
         std::endl;
@@ -200,8 +200,10 @@ namespace Args {
               exit(0);
             }
 
-            if (enable_method(method) == true)
+            if (enable_method(method) == true) {
+              enable();
               break;
+            }
 
             Log::print_error(Log::SETTINGS, "Invalid method selected");
             exit(1);

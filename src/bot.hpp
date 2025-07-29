@@ -25,7 +25,14 @@ namespace Bot {
 
 	void run() {
     do {
-      bool u = XRP::update();
+      bool u = false;
+      try {
+        u = XRP::update();
+      } catch (std::exception& e) {
+        Log::print_error(Log::XRP, "Retreiving update failed: ", e.what());
+      } catch (...) {
+        Log::print_error(Log::XRP, "Retreiving update failed");
+      }
 
       Publish::poll();
 

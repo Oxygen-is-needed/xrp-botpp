@@ -5,6 +5,7 @@
 
 namespace Log {
 #define X(a,b,...) Y(a,b, "32")
+  // TODO: move to config
 #define LOG_METHODS	\
 	Y(SYSTEM,   "System",   "35")	\
 	Y(XRP,      "XRP",      "36")	\
@@ -19,8 +20,9 @@ namespace Log {
 	};
 
 
+  // TODO: change to string_view?
 	const std::string log_methods[] = {
-#define Y(a,b,c,...)	"[\033[" c "m" b "\033[0m]: ",
+#define Y(a,b,c)	"[\033[" c "m" b "\033[0m]: ",
 		LOG_METHODS
 #undef Y
 	};

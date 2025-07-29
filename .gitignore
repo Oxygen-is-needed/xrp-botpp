@@ -3,5 +3,6 @@
 img/header*
 img/xrp*
 test/*
-xrp-botpp
+**xrp-botpp
 lib/*
+pkg/**

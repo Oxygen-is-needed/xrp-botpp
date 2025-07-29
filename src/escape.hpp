@@ -44,6 +44,7 @@ namespace Escape {
         Log::print(Log::SYSTEM, "Caught Multiple ", name, ".\n\tExiting Immediately.");
         exit(sig);
       }
+      used_signals = sig;
     }
 
     void user(int sig) {

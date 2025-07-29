@@ -30,6 +30,12 @@ namespace Utils {
     t.c_lflag &= ~ECHO; // Enable ECHO flag
     tcsetattr(STDIN_FILENO, TCSANOW, &t);
   }
+
+  std::string tm2String(const std::tm& timeStruct, const std::string& format) {
+    char buffer[100]; // Buffer to hold the formatted string
+    strftime(buffer, sizeof(buffer), format.c_str(), &timeStruct);
+    return std::string(buffer);
+  }
 }
 
 #endif

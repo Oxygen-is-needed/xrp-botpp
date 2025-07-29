@@ -23,6 +23,7 @@ namespace Publish {
     PURCHASE, ///< Data holds information about purchase
   };
   struct Publish_Data {
+    std::tm time;
     enum Data_Type type = NONE; ///< The type of Data Stored.
 
     float r_usd   = 0;  ///< Ratio of xrp to usd.
@@ -31,11 +32,11 @@ namespace Publish {
     float p_coin  = 0;  ///< Amount of coin transaction.
     float p_xrp   = 0;  ///< Cost of coin transaction in xrp.
     float p_usd   = 0;  ///< Cost of coin transaction in usd.
-
+    std::string tx_hash = "";
     std::string buy_address = ""; ///< The transacting address.
-    float buy_coin = 0; ///< Amount of coins the wallet holds.
-    float buy_xrp = 0;  ///< Amount of xrp total the wallet holds. 
-    float buy_usd = 0;  ///< The Cost of all xrp in usd.
+    float buyer_coin = 0; ///< Amount of coins the wallet holds.
+    float buyer_xrp = 0;  ///< Amount of xrp total the wallet holds. 
+    float buyer_usd = 0;  ///< The Cost of all xrp in usd.
 
     int marketcap_xrp   = 0;  ///< The coin's market cap in xrp.
     int marketcap_usd   = 0;  ///< The coin's market cap in usd.
@@ -61,7 +62,7 @@ namespace Publish {
 
 
   Methods_Config method_config[METHOD_LENGTH] = {
-#define X(a,b,c,d,e,f,g,...)  {b,c,d,e,f,g,false},
+#define X(a,b,c,d,e,f,g)  {b,c,d,e,f,g,false},
     METHODS
 #undef X
   };

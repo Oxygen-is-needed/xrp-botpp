@@ -29,15 +29,19 @@
             - [x] Save
             - [x] Load
 
-- [ ] XRP Data Aquisition
-    - [-] Check if new buy, and update
-    - [ ] Get Data
+- [x] XRP Data Aquisition
+    - [x] Check if new buy, and update
+    - [x] Get Data
+        - <https://github.com/adrianjustdoit58/xrp-transaction-tracker/>
+        - <https://github.com/LimpidCrypto/xrpl-trading>
         - [x] Description of each in Publish Data struct.
-        - [ ] buyer
-            - [ ] buy address
-            - [ ] buyer total coin
-            - [ ] buyer total xrp
-            - [ ] buyer total usd
+        - [x] Time of transaction
+        - [x] Transaction Address for XRPScan
+        - [x] buyer
+            - [x] buy address
+            - [x] buy total coin
+            - [x] buy total xrp
+            - [x] buy total usd
         - [x] total marketcap
             - [x] usd
             - [x] xrp
@@ -47,7 +51,6 @@
         - [x] amount holders
         - [x] amount trustline
     - [x] Fix wrong marketcap data
-    - [ ] Store publish data, with date, in a file.
 
 - [x] Main
     - [x] Escape
@@ -61,7 +64,7 @@
             - [x] by number
             - [x] by name
         - [x] Publish Method Specific
-            - [x] enable/disable each method
+            - [x] enable/disable each method `-e`|`--enable` || `-d`|`--disable`
             - [x] Change API Key
                 - [x] by stdin via '-'
                 - [x] disable echo when typing via stdin
@@ -78,30 +81,30 @@
     - [x] Load Files
     - [x] Run Bot
 
-- [ ] Wrap up
+- [x] Wrap up
     - [x] Fix Network Market cap error
     - [x] Remove API key
     - [x] Write Config Comments
     - [x] Look at TODO's in code
     - [x] Detect Unused Code
-    - [ ] Write README.md
+    - [x] Update/Set Version Number
+    - [x] Write README.md
         - [x] add from help page
         - [x] description
         - [x] contribution
-        - [ ] license
+        - [x] license
         - [x] features
             - [x] looks for key in environment varibles first
             - [x] looks for key in local file
                 - [x] conditions
                 - [x] locations
-    - [ ] Update/Set Version Number
-- [ ] Package and Release
-    - [ ] add: make release `pkg/`
-        - [ ] Makefile
-        - [ ] Update clean function
-        - [ ] Adjust docs/compiling/linux.md
-    - [ ] add: logo
-    - [ ] add: github Releases
+- [x] Package and Release
+    - [x] add: make release `pkg/`
+        - [x] Makefile
+        - [x] Update clean function
+        - [x] Adjust docs/compiling/linux.md
+    - [x] add: logo
+    - [x] add: github Releases
 
 # Future
 
@@ -130,6 +133,9 @@
     - [ ] Ability to put names to the addresses
 - [ ] Network
     - [ ] Set errno type system when error is presented.
+- [ ] XRP
+    - [ ] Get wallet total
+    - [ ] Store publish data, with date, in a file.
 
 ## sources
 

@@ -234,7 +234,14 @@ namespace Telegram {
       Log::print(Log::TELEGRAM, "Was unable to initalize long_poll");
       exit(1);
     }
-    long_poll->start();
+
+    try {
+      long_poll->start();
+    } catch (TgBot::TgException& e) {
+        Log::print_error(Log::TELEGRAM, "Poll: Bot error encountered: ", e.what());
+    } catch (...) {
+        Log::print_error(Log::TELEGRAM, "Poll: Unknown bot error encountered: ");
+    }
 
     return;
   }
@@ -258,28 +265,34 @@ namespace Telegram {
     }
 
     std::string format(Publish_Data& pd) {
-      std::string buyer = fmt::format("https://xrpscan.com/account/{}",
-          pd.buy_address); 
-      std::string chart = "https://dexscreener.com/xrpl/FML.rw4tietmzbPG2G66UudSGaQ5uYztNow3gQ_xrp";
+      std::string buyer = "https://xrpscan.com/account/{}" + pd.buy_address;
+      std::string chart = "https://dexscreener.com/xrpl/"
+        + Conf::id_code + Conf::address;
+      std::string tx_url = "https://xrpscan.com/tx/" + pd.tx_hash;
 
       std::string out = fmt::format(
+          "{10}\n"
           "💵 New Buy of FML\n"
           "\n"
           "USD ${2:.2f} | XRP {1:.2f} | FML {0:.2f}\n"
-          "[Buyer]({3}): ${8}\n"
+          "[tx]({11})⛏ [Buyer]({3})\n"
           "[Chart]({4})\n"
           "\n"
           "Market Cap: ${5:} | XRP {9}\n"
           "Hold: {6} | Trust: {7}\n",
 
-          pd.p_coin, pd.p_xrp, pd.p_usd,
-          buyer,
-          chart,
-          Utils::formatWithCommas(pd.marketcap_usd),
-          pd.holders,
-          pd.lines,
-          pd.buy_usd,
-          Utils::formatWithCommas(pd.marketcap_xrp)
+          /* 0*/ pd.p_coin,
+          /* 1*/ pd.p_xrp,
+          /* 2*/ pd.p_usd,
+          /* 3*/ buyer,
+          /* 4*/ chart,
+          /* 5*/ Utils::formatWithCommas(pd.marketcap_usd),
+          /* 6*/ pd.holders,
+          /* 7*/ pd.lines,
+          /* 8*/ pd.buyer_usd, // Removed
+          /* 9*/ Utils::formatWithCommas(pd.marketcap_xrp),
+          /*10*/ Utils::tm2String(pd.time, "%b %d %g @ %H:%m"),
+          /*11*/ tx_url
         );
       return out;
     }
@@ -294,12 +307,18 @@ namespace Telegram {
 			return;
 		}
 
-    std::string msg = Push::format(pd);
+    try {
+      std::string msg = Push::format(pd);
 
-		for (auto m : msgs) {
-      if (m.msg == true)
-        Push::message(m, msg);
-		}
+      for (auto m : msgs) {
+        if (m.msg == true)
+          Push::message(m, msg);
+      }
+    } catch (TgBot::TgException& e) {
+        Log::print_error(Log::TELEGRAM, "Push: Bot error encountered: ", e.what());
+    } catch (...) {
+        Log::print_error(Log::TELEGRAM, "Push: Unknown bot error encountered: ");
+    }
 	}
 
   std::string bot_username = "";
