@@ -109,6 +109,7 @@
 # Future
 
 - [ ] Log
+    - [ ] Disable std::out logging
     - [ ] Log total errors encountered
     - [ ] Log total errors including from historical runs
     - [ ] Log total errors per log method
