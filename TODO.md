@@ -106,6 +106,24 @@
     - [x] add: logo
     - [x] add: github Releases
 
+# v1.1.0 - Update networking
+
+- [ ] XRP
+    - [ ] Check if multiple transactions not looked (keep data index?)
+        - hold the data then come back to it on next update loop
+    - [ ] Get wallet total
+    - [ ] Store publish data, with date, in a file.
+
+- [ ] Telegram
+    - [ ] Improve message look
+    - [ ] Method to add/start bot without using chat commands
+
+- [ ] Wrap up
+    - [ ] Look at TODO's in code
+    - [ ] Detect Unused Code
+    - [ ] Update/Set Version Number
+    - [ ] Update README.md
+
 # Future
 
 - [ ] Log
@@ -135,8 +153,9 @@
 - [ ] Network
     - [ ] Set errno type system when error is presented.
 - [ ] XRP
-    - [ ] Get wallet total
-    - [ ] Store publish data, with date, in a file.
+    - [ ] Calculate Trustline #
+    - [ ] Put it on a longer timer
+        - every 10 update checks reset when ran
 
 ## sources
 

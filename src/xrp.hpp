@@ -222,7 +222,14 @@ namespace XRP {
       Publish::Data_Type u = Query::get_update();
 
       if (u != Publish::NONE) {
-        Log::print(Log::XRP, "Update Found");
+        auto t = std::time(nullptr);
+        auto tm = *std::localtime(&t);
+
+        std::ostringstream oss;
+        oss << std::put_time(&tm, "%d-%m-%YT%H:%M:%S");
+        auto time = oss.str();
+
+        Log::print(Log::XRP, time, " Update Found");
       }
 
       return u;
