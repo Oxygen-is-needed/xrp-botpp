@@ -117,39 +117,17 @@ namespace XRP {
       return true;
     }
 
-    // TODO: move, and generalize.
-    std::tm string2tm(const std::string& s) {
-      std::tm time = {};
-      std::istringstream ss(s);
-      ss.imbue(std::locale("en_US.utf-8"));
-      ss >> std::get_time(&time, "%Y-%m-%dT%H:%M:%S");
-      return time;
+    // TODO: check the unix time of each?
+    bool tmNewer(const struct tm& tm1, const struct tm& tm2) {
+      time_t time1 = mktime(const_cast<struct tm*>(&tm1));
+      time_t time2 = mktime(const_cast<struct tm*>(&tm2));
+
+      return difftime(time1, time2) > 0;
     }
 
-    bool tmNewer(const std::tm& tm1, const std::tm& tm2) {
-      // Convert std::tm to time_t
-      time_t time1 = mktime(const_cast<std::tm*>(&tm1));
-      time_t time2 = mktime(const_cast<std::tm*>(&tm2));
-
-      // Compare the time_t values
-      return difftime(time1, time2) > 0; // Returns true if tm1 is newer than tm2
-    }
-    //bool tmNewer(std::tm n, std::tm o) {
-    //  if (n.tm_year < o.tm_year)
-    //    return false;
-    //  if (n.tm_yday < o.tm_yday)
-    //    return false;
-    //  if (n.tm_hour < o.tm_hour)
-    //    return false;
-    //  if (n.tm_min < o.tm_min)
-    //    return false;
-    //  if (n.tm_sec <= o.tm_sec)
-    //    return false;
-    //  return false;
-    //}
-
-    std::tm last_time;
+    struct tm last_time;
     Publish::Data_Type get_update() {
+      // TODO: check xrp node instead?
       std::string ret = Network::Query::query(
           "https://api.xrpscan.com/api/v1/account/" + Conf::address +
           "/transactions?origin=xrp-transaction-tracker");
@@ -166,13 +144,15 @@ namespace XRP {
 
 
       Publish::Data_Type u = Publish::NONE;
-      std::string address = "";
       float value = 0;
+      std::string address = "";
       std::string tx_hash = "";
-      try {
 
+      try {
         int tlen = json["transactions"].size();;
-        for (int x=0; x<tlen-1; x++) {
+        int tx=-1;
+
+        for (int x=tlen-1; x>=0; x--) {
           if (json["transactions"][x]["TransactionType"] != "Payment")
             continue;
 
@@ -180,35 +160,42 @@ namespace XRP {
               Conf::id_code)
             continue;
 
-
           std::string t = json["transactions"][x]["date"];
-          std::tm time = string2tm(t);
+          struct tm time{};
+          Utils::string2tm(t.c_str(), time);
           if (tmNewer(time, last_time) == false) {
             continue;
           }
 
-
-          address = json["transactions"][x]["Account"];
-
-          value = std::stof(
-              std::string(
-                  json["transactions"][x]["meta"]["delivered_amount"]["value"])
-                  .c_str());
-          tx_hash = json["transactions"][x]["hash"];
-
-
           last_time = time;
-          u = Publish::PURCHASE;
+          tx = x;
           break;
         }
+
+        if (tx == -1) {
+          return Publish::NONE;
+        }
+
+        address = json["transactions"][tx]["Account"];
+        value = std::stof(
+            std::string(
+              json["transactions"][tx]["meta"]["delivered_amount"]["value"])
+            .c_str());
+        tx_hash = json["transactions"][tx]["hash"];
+
+        u = Publish::PURCHASE;
+
       } catch (const nlohmann::json::out_of_range& e) {
         Log::print_error(Log::XRP, __LINE__, ": Json: key not found ", e.what());
         return Publish::NONE;
       } catch (const nlohmann::json::type_error& e) {
         Log::print_error(Log::XRP, __LINE__, ": Json: Type mismatch ", e.what());
         return Publish::NONE;
+      } catch (const std::string& e) {
+        Log::print_error(Log::XRP, __LINE__, ": ", e);
+        return Publish::NONE;
       } catch (...) {
-        Log::print_error(Log::XRP, __LINE__, ": Json: Unknown Error");
+        Log::print_error(Log::XRP, __LINE__, ": Unknown Error");
         return Publish::NONE;
       }
 
@@ -232,8 +219,6 @@ namespace XRP {
 
   namespace Update {
     Publish::Data_Type need_update() {
-      Log::print(Log::XRP, "Checking for update");
-      //Publish::Data_Type u = Query::test();
       Publish::Data_Type u = Query::get_update();
 
       if (u != Publish::NONE) {
