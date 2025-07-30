@@ -275,7 +275,7 @@ namespace Telegram {
           "💵 New Buy of FML\n"
           "\n"
           "USD ${2:.2f} | XRP {1:.2f} | FML {0:.2f}\n"
-          "[tx]({11})⛏ [Buyer]({3})\n"
+          "[Buyer]({3}) | [[TX]({11})⛏]\n"
           "[Chart]({4})\n"
           "\n"
           "Market Cap: ${5:} | XRP {9}\n"
